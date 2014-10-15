@@ -1,7 +1,0 @@
-[15-Oct-2014 11:49:41] PHP Warning:  sqlite_query() [<a href='function.sqlite-query'>function.sqlite-query</a>]: no such table: measures in /home/arasaian/public_html/test/recipe/recipe-setup.php on line 180
-[15-Oct-2014 11:49:41] PHP Warning:  sqlite_query() [<a href='function.sqlite-query'>function.sqlite-query</a>]: no such table: types in /home/arasaian/public_html/test/recipe/recipe-setup.php on line 180
-[15-Oct-2014 11:49:41] PHP Warning:  sqlite_query() [<a href='function.sqlite-query'>function.sqlite-query</a>]: no such table: ingredients in /home/arasaian/public_html/test/recipe/recipe-setup.php on line 180
-[15-Oct-2014 11:49:41] PHP Warning:  sqlite_query() [<a href='function.sqlite-query'>function.sqlite-query</a>]: no such table: directions in /home/arasaian/public_html/test/recipe/recipe-setup.php on line 180
-[15-Oct-2014 11:49:41] PHP Warning:  sqlite_query() [<a href='function.sqlite-query'>function.sqlite-query</a>]: no such table: recipes in /home/arasaian/public_html/test/recipe/recipe-setup.php on line 180
-[15-Oct-2014 11:49:41] PHP Warning:  sqlite_query() [<a href='function.sqlite-query'>function.sqlite-query</a>]: no such table: menus in /home/arasaian/public_html/test/recipe/recipe-setup.php on line 180
-[15-Oct-2014 11:49:41] PHP Warning:  sqlite_query() [<a href='function.sqlite-query'>function.sqlite-query</a>]: no such table: menus_recipes in /home/arasaian/public_html/test/recipe/recipe-setup.php on line 180

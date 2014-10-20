@@ -11,16 +11,12 @@ TurnDebugOff();
 
 $conn = new SuperConnection();
 
-$sql = "SELECT s.id, s.name, s.school, s.level, s.isritual, s.casttime, s.range, s.components, s.duration, s.description, 
-			(SELECT GROUP_CONCAT((			
-				SELECT a.class
-				FROM class a
-				WHERE a.id = c.class_id) SEPARATOR ' ')
-			FROM class_spells c
-			WHERE c.spell_id = s.id
-			GROUP BY c.spell_id) AS classes
-		FROM spells s
-		ORDER BY s.level, s.school, s.name";
+$sql = "select directions.step_number step,
+				directions.direction direction
+			from directions
+			where directions.recipe_id = $recipe_id";
+
+
 
 $params = array();
 $params[] = $email;

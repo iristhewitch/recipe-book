@@ -9,10 +9,11 @@
 $config = array(
 	"db" => array(
 		"main" => array(
-			"dbname" => "",
-			"username" => "",
-			"password" => "",
-			"host" => "localhost"
+			//"dbname" => "",
+			//"username" => "",
+			//"password" => "",
+			//"host" => "localhost",
+            "mode" => 0666
 		)
 	),
 	"urls" => array(

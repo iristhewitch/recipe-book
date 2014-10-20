@@ -4,7 +4,7 @@
     app.directive('recipeIngredients', function(){
         return {
             restrict: 'E',
-            templateUrl: 'templates/recipe-ingredients.html'
+            templateUrl: 'templates/display-recipe.html'
         };
     });
 })();

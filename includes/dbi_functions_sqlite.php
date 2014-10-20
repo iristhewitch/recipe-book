@@ -5,7 +5,7 @@ if (!defined("INCLUDES_PATH")){
 }
 /* ¯¯¯¯¯¯¯¯¯¯ CONFIGURATION ¯¯¯¯¯¯¯¯¯¯¯¯ */
 
-require_once(INCLUDES_PATH . '/debug_functions.php');
+//require_once(INCLUDES_PATH . '/debug_functions.php');
 abstract class SQLiteConnection
 {
 	//protected $command;
@@ -35,7 +35,7 @@ abstract class SQLiteConnection
         }
 
         if($this->db = sqlite_open('recipe-book.sqlite', 0666, $error)) {
-            trace('Connected to the database!');
+            //trace('Connected to the database!');
         } else {
             die('could not find or create database' . PHP_EOL . PHP_EOL . $error);
         }
@@ -47,50 +47,52 @@ abstract class SQLiteConnection
 	{
         sqlite_close($this->db);
 	}
-	
+
 	public function ExecuteQuery($query)
 	{
 		$this->connect();
 
-        $error = '';
-
         try {
-            if($result = $this->db->sqlite_query($query, SQLITE_BOTH, $error)) {
-                trace('Executed query: ' . $query);
-            } else {
-                die($error);
-            }
+            $result = sqlite_query($this->db, $query);
         } catch (Exception $e) {
             die($e->getMessage());
         }
 
-
-
 		/*$result = $this->command->query($sql)
-			or die("Error executing query:\n\n[$sql]\n Error Message: [".$this->command->error."]");			
-		$this->disconnect();*/
+			or die("Error executing query:\n\n[$sql]\n Error Message: [".$this->command->error."]");*/
+        $this->disconnect();
 		return $result;
 	}
+
+    public function ExecuteArrayQuery($query)
+    {
+        $this->connect();
+
+        try {
+            $result = sqlite_array_query($this->db, $query);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+
+        /*$result = $this->command->query($sql)
+            or die("Error executing query:\n\n[$sql]\n Error Message: [".$this->command->error."]");*/
+        $this->disconnect();
+        return $result;
+    }
 	
 	public function ExecuteQueries($queries, $stopOnError = true)
 	{
 		$this->connect();
-        $error = '';
+
         for($i = 0; $i < count($queries); $i++) {
             try{
-                if($results[$i] = $this->db->sqlite_query($queries[$i], SQLITE_BOTH, $error)) {
-                    trace('Executed query: ' . $queries[$i]);
-                } else {
-                    if($stopOnError)
-                        die($error);
-                    else
-                        trace($error);
-                }
+                //echo '<pre>'.$queries[$i].'</pre>';
+                $results[$i] = sqlite_query($this->db,$queries[$i]);
             } catch (Exception $e) {
                 if($stopOnError)
                     die($e->getMessage());
-                else
-                    trace($e->getMessage());
+                //else
+                    //trace($e->getMessage());
             }
         }
 

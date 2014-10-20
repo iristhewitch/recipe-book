@@ -4,11 +4,13 @@
 		require_once("config.php");
 	}
 /* ¯¯¯¯¯¯¯¯¯¯ CONFIGURATION ¯¯¯¯¯¯¯¯¯¯¯¯ */
-	
-	$error = '';
-	$db = null;
 
-	if ($db = sqlite_open('recipe-book.sqlite', 0666, $error)) {
+require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
+
+	$error = '';
+	$db = new SuperConnection();
+
+	if ($db) {
 		// table setup
 		$dropStrings = array(
 			'drop table measures',
@@ -140,7 +142,7 @@
 				and recipes.id = menus_recipes.recipe_id
 				and menus.id = 1';
 		
-		processQueries($db, $dropStrings);
+		/*processQueries($db, $dropStrings);
 		processQueries($db, $createStrings);
 		processQueries($db, $measureStrings);
 		processQueries($db, $ingredientTypeStrings);
@@ -148,34 +150,24 @@
 		processQueries($db, $initialIngredientStrings);
 		processQueries($db, $initialDirectionStrings);
 		processQueries($db, $initialMenuStrings);
-		processQueries($db, $initialMenuRecipeStrings);
+		processQueries($db, $initialMenuRecipeStrings);*/
 
-        try {
-            $ingredients = sqlite_array_query($db, $checkRecipeIngredients);
-            //printIngredients($ingredients);
-
-            $directions = sqlite_array_query($db, $checkRecipeDirections);
-            //printDirections($directions);
-
-            $menuRecipes = sqlite_array_query($db, $checkMenusRecipes);
-            //printMenuRecipes($menuRecipes);
-
-            //processArrayQueries($db, $checkStrings);
-        } catch (Exception $e) {
-            echo $e->getMessage(), PHP_EOL;
-            sqlite_close($db);
-        }
-
-		sqlite_close($db);
+        $db->ExecuteQueries($dropStrings);
+        $db->ExecuteQueries($createStrings);
+        $db->ExecuteQueries($measureStrings);
+        $db->ExecuteQueries($ingredientTypeStrings);
+        $db->ExecuteQueries($initialRecipeStrings);
+        $db->ExecuteQueries($initialIngredientStrings);
+        $db->ExecuteQueries($initialDirectionStrings);
+        $db->ExecuteQueries($initialMenuStrings);
+        $db->ExecuteQueries($initialMenuRecipeStrings);
 
         echo '<pre>Initialized recipe database.</pre>';
 	}
 	else {
 		echo '<pre>';
-		echo 'could not find recipe database';
-		echo $error;
+		echo 'Could not find or initialize recipe database';
 		echo '</pre>';
-		sqlite_close($db);
 	}
 	
 	flush();

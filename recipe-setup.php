@@ -13,38 +13,40 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 	if ($db) {
 		// table setup
 		$dropStrings = array(
-			'drop table measures',
-			'drop table types',
-			'drop table ingredients',
+			'drop table recipes_ingredients',
+			'drop table menus_recipes',
 			'drop table directions',
 			'drop table recipes',
+			'drop table ingredients',
 			'drop table menus',
-			'drop table menus_recipes'
+			'drop table types',
+            'drop table measures'
 		);
 
 		$createStrings = array(
-			'create table measures (id integer, type text, primary key (id))',
-			'create table types (id integer, name text, primary key (id))',
-			'create table ingredients (id integer, recipe_id integer check (recipes), type text check (types), measure_amount double, measure_id integer check(measures), name text, primary key (id))',
-			'create table directions (recipe_id integer check (recipes), step_number integer, direction text, primary key(recipe_id, step_number))',
-			'create table recipes (id integer primary key, name text)',
-			'create table menus (id integer primary key, name text, menu_start_date text, menu_end_date text)',
-			'create table menus_recipes (menu_id integer, recipe_id integer, primary key (menu_id, recipe_id))'
+			'create table measures (id integer not null, name text, primary key (id))',
+			'create table types (id integer not null, name text not null, primary key (id))',
+			'create table menus (id integer not null, name text not null, start_date text not null, end_date text not null, primary key (id))',
+			'create table ingredients(id integer not null, name text not null, types_id integer not null, primary key (id), foreign key (types_id) references types (id))',
+			'create table recipes (id integer not null, name text not null, min_time integer not null, max_time integer not null, servings integer not null, primary key (id))',
+			'create table directions (id integer not null, recipes_id integer not null, step_number integer not null, direction_text text not null, primary key (id), foreign key (recipes_id) references recipes (id))',
+			'create table menus_recipes(menus_id integer not null, recipes_id integer not null, primary key (menus_id, recipes_id), foreign key (menus_id) references menus (id), foreign key (recipes_id) references recipes (id))',
+            'create table recipes_ingredients(recipes_id integer not null, ingredients_id integer not null, measures_id integer not null, measure_amount double not null, primary key (recipes_id, ingredients_id), foreign key (ingredients_id) references ingredients (id), foreign key (recipes_id) references recipes (id), foreign key (measures_id) references measures (id))'
 		);
 		
 		$measureStrings = array(
-			'insert into measures (type) values ("")',												// 1
-			'insert into measures (type) values ("tbsp(s)")',										// 2
-			'insert into measures (type) values ("tsp(s)")',										// 3
-			'insert into measures (type) values ("cup(s)")',										// 4
-			'insert into measures (type) values ("oz(s)")',											// 5
-			'insert into measures (type) values ("can(s)")',										// 6
-			'insert into measures (type) values ("clove(s)")',										// 7
-			'insert into measures (type) values ("stick(s)")',										// 8
-			'insert into measures (type) values ("lb(s)")',											// 9
-			'insert into measures (type) values ("jar(s)")',										// 10
-			'insert into measures (type) values ("bag(s)")',										// 11
-			'insert into measures (type) values ("package(s)")'										// 12
+			'insert into measures (name) values ("")',												// 1
+			'insert into measures (name) values ("tbsp(s)")',										// 2
+			'insert into measures (name) values ("tsp(s)")',										// 3
+			'insert into measures (name) values ("cup(s)")',										// 4
+			'insert into measures (name) values ("oz(s)")',											// 5
+			'insert into measures (name) values ("can(s)")',										// 6
+			'insert into measures (name) values ("clove(s)")',										// 7
+			'insert into measures (name) values ("stick(s)")',										// 8
+			'insert into measures (name) values ("lb(s)")',											// 9
+			'insert into measures (name) values ("jar(s)")',										// 10
+			'insert into measures (name) values ("bag(s)")',										// 11
+			'insert into measures (name) values ("package(s)")'										// 12
 		);
 		
 		$ingredientTypeStrings = array(
@@ -57,76 +59,104 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 			'insert into types (name) values ("Fruits, Vegetables and Others")',    				// 7
 			'insert into types (name) values ("Herbs, Spices and Seasonings")'						// 8
 		);
-		
+
+        $initialMenuStrings = array(
+            // YYYY-MM-DD
+            'insert into menus (name, start_date, end_date) values ("October 13-17", "2014-09-13", "2014-09-17")'
+        );
+
+        $initialIngredientStrings = array(
+            // recipe id
+            // type
+            // name
+            'insert into ingredients (types_id, name) values (6, "Ground chicken")',            // 1
+            'insert into ingredients (types_id, name) values (4, "White navy beans")',          // 2
+            'insert into ingredients (types_id, name) values (4, "Fire roasted tomatoes")',     // 3
+            'insert into ingredients (types_id, name) values (5, "Chicken broth")',             // 4
+			'insert into ingredients (types_id, name) values (3, "Buffalo wing sauce")',        // 5
+			'insert into ingredients (types_id, name) values (3, "Ranch dressing mix")',        // 6
+			'insert into ingredients (types_id, name) values (4, "Corn")',                      // 7
+			'insert into ingredients (types_id, name) values (8, "Onion powder")',              // 8
+			'insert into ingredients (types_id, name) values (8, "Garlic powder")',             // 9
+			'insert into ingredients (types_id, name) values (8, "Celery salt")',               // 10
+			'insert into ingredients (types_id, name) values (8, "Dried cilantro")',            // 11
+			'insert into ingredients (types_id, name) values (8, "Salt")',                      // 12
+			'insert into ingredients (types_id, name) values (1, "Cream cheese")',              // 13
+			'insert into ingredients (types_id, name) values (1, "Blue cheese crumbles")'       // 14
+        );
+
 		$initialRecipeStrings = array(
-			'insert into recipes (name) values ("Slow Cooker Buffalo Chicken Chili")',				// 1
-			'insert into recipes (name) values ("Slow Cooker Jalapeno Popper Chicken Taquitos")',	// 2
-			'insert into recipes (name) values ("Baked Chicken Shawarma")',							// 3
-			'insert into recipes (name) values ("Creamy Tomato Tortellini Soup")',					// 4
-			'insert into recipes (name) values ("Creamy Chicken and Broccoli")'						// 5
-		);
-		
-		$initialIngredientStrings = array(
-			// recipe id,
-			// type,
-			// measure_amount,
-			// measure_id,
-			// name
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, 6, 2, 9, "Ground chicken")',
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, 4, 1, 6, "White navy beans")',
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, 4, 1, 6, "Fire roasted tomatoes")',
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, 5, 4, 4, "Chicken broth")'/*,
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, x, x, x, "Buffalo wing sauce")',
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, x, x, x, "Ranch dressing mix")',
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, x, x, x, "Corn")',
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, x, x, x, "Onion powder")',
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, x, x, x, "Garlic powder")',
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, x, x, x, "Celery salt")',
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, x, x, x, "Dried cilantro")',
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, x, x, x, "Salt")',
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, x, x, x, "Cream cheese")',
-			'insert into ingredients (recipe_id, type, measure_amount, measure_id, name) values (1, x, x, x, "Blue cheese crumbles")'*/
+            //id
+            //name
+            //min time
+            //max time
+            //servings
+			'insert into recipes (name, min_time, max_time, servings) values ("Slow Cooker Buffalo Chicken Chili",0,0,0)',				    // 1
+			'insert into recipes (name, min_time, max_time, servings) values ("Slow Cooker Jalapeno Popper Chicken Taquitos",20,500,4)',	// 2
+			'insert into recipes (name, min_time, max_time, servings) values ("Baked Chicken Shawarma",30,60,2)',							// 3
+			'insert into recipes (name, min_time, max_time, servings) values ("Creamy Tomato Tortellini Soup",0,0,0)',					    // 4
+			'insert into recipes (name, min_time, max_time, servings) values ("Creamy Chicken and Broccoli",0,210,6)'						// 5
 		);
 		
 		$initialDirectionStrings = array(
-			'insert into directions (recipe_id, step_number, direction) values (1, 1, "Brown ground chicken until fully cooked, place in slow cooker (or brown ahead of time and store in fridge until ready to assemble).")',
-			'insert into directions (recipe_id, step_number, direction) values (1, 2, "Add remaining ingredients except for cream cheese and blue cheese and give it all a stir to combine.")',
-			'insert into directions (recipe_id, step_number, direction) values (1, 3, "Add block of cream cheese on the top and cover.")',
-			'insert into directions (recipe_id, step_number, direction) values (1, 4, "Cook on high for 4 hours or low on 8.")',
-			'insert into directions (recipe_id, step_number, direction) values (1, 5, "Stir to incorporate cream cheese and add additional wing sauce as desired")',
-			'insert into directions (recipe_id, step_number, direction) values (1, 6, "Top individual bowls with blue cheese crumbles if desired")'
+            //recipe_id
+            //step_number
+            //direction_text
+			'insert into directions (recipes_id, step_number, direction_text) values (1, 1, "Brown ground chicken until fully cooked, place in slow cooker (or brown ahead of time and store in fridge until ready to assemble).")',
+			'insert into directions (recipes_id, step_number, direction_text) values (1, 2, "Add remaining ingredients except for cream cheese and blue cheese and give it all a stir to combine.")',
+			'insert into directions (recipes_id, step_number, direction_text) values (1, 3, "Add block of cream cheese on the top and cover.")',
+			'insert into directions (recipes_id, step_number, direction_text) values (1, 4, "Cook on high for 4 hours or low on 8.")',
+			'insert into directions (recipes_id, step_number, direction_text) values (1, 5, "Stir to incorporate cream cheese and add additional wing sauce as desired")',
+			'insert into directions (recipes_id, step_number, direction_text) values (1, 6, "Top individual bowls with blue cheese crumbles if desired")'
 		);
 		
-		$initialMenuStrings = array(
-			// YYYY-MM-DD
-			'insert into menus (name, menu_start_date, menu_end_date) values ("October 13-17", "2014-09-13", "2014-09-17")'
+		$initialMenusRecipesStrings = array(
+			'insert into menus_recipes (menus_id, recipes_id) values (1, 1)',
+			'insert into menus_recipes (menus_id, recipes_id) values (1, 2)',
+			'insert into menus_recipes (menus_id, recipes_id) values (1, 3)',
+			'insert into menus_recipes (menus_id, recipes_id) values (1, 4)',
+			'insert into menus_recipes (menus_id, recipes_id) values (1, 5)'
 		);
-		
-		$initialMenuRecipeStrings = array(
-			'insert into menus_recipes values (1, 1)',
-			'insert into menus_recipes values (1, 2)',
-			'insert into menus_recipes values (1, 3)',
-			'insert into menus_recipes values (1, 4)',
-			'insert into menus_recipes values (1, 5)'
-		);
+
+        $initialRecipesIngredientsStrings = array(
+            //ingredients_id
+            //measures_id
+            //measure_amount
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 1, 9, 1)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 2, 6, 1)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 3, 6, 1)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 4, 4, 4)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 5, 4, 0.5)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 6, 12, 1)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 7, 4, 1)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 8, 3, 0.5)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 9, 3, 0.5)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 10, 3, 0.5)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 11, 3, 0.5)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 12, 3, 0.5)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 13, 5, 8)',
+            'insert into recipes_ingredients (recipes_id, ingredients_id, measures_id, measure_amount) values (1, 14, 1, 1)'
+        );
 		
 		$checkStrings = array(
-			'select * from recipes',
 			'select * from measures',
 			'select * from types',
-			'select * from ingredients',
-			'select * from directions',
 			'select * from menus',
-			'select * from menus_recipes'
+			'select * from ingredients',
+			'select * from recipes',
+			'select * from directions',
+			'select * from menuss_recipes',
+            'select * from recipes_ingredients'
 		);
 		
 		$checkRecipeIngredients =
-			'select ingredients.measure_amount amount,
-				measures.type amount_type,
-				ingredients.name name
-			from ingredients, measures
-			where ingredients.recipe_id = 1
-				and ingredients.measure_id = measures.id';
+			'select recipes_ingredients.measure_amount,
+	                measures.name,
+	                ingredients.name
+            from ingredients, measures, recipes_ingredients
+            where recipes_ingredients.recipes_id = 1
+	          and recipes_ingredients.ingredients_id = ingredients.id
+	          and recipes_ingredients.measures_id = measures.id';
 		
 		$checkRecipeDirections =
 			'select directions.step_number step,
@@ -135,32 +165,24 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 			where directions.recipe_id = 1';
 			
 		$checkMenusRecipes =
-			'select menus.name menu_name,
-				recipes.name recipe_name
-			from menus, recipes, menus_recipes
-			where menus.id = menus_recipes.menu_id
-				and recipes.id = menus_recipes.recipe_id
-				and menus.id = 1';
-		
-		/*processQueries($db, $dropStrings);
-		processQueries($db, $createStrings);
-		processQueries($db, $measureStrings);
-		processQueries($db, $ingredientTypeStrings);
-		processQueries($db, $initialRecipeStrings);
-		processQueries($db, $initialIngredientStrings);
-		processQueries($db, $initialDirectionStrings);
-		processQueries($db, $initialMenuStrings);
-		processQueries($db, $initialMenuRecipeStrings);*/
+            'select recipes.name
+            from recipes, menus_recipes
+            where menus_recipes.recipe_id = recipes.id
+	          and menus_recipes.menus_id = 1';
 
         $db->ExecuteQueries($dropStrings);
         $db->ExecuteQueries($createStrings);
         $db->ExecuteQueries($measureStrings);
-        $db->ExecuteQueries($ingredientTypeStrings);
-        $db->ExecuteQueries($initialRecipeStrings);
-        $db->ExecuteQueries($initialIngredientStrings);
-        $db->ExecuteQueries($initialDirectionStrings);
         $db->ExecuteQueries($initialMenuStrings);
-        $db->ExecuteQueries($initialMenuRecipeStrings);
+        $db->ExecuteQueries($initialIngredientStrings);
+        $db->ExecuteQueries($initialRecipeStrings);
+        $db->ExecuteQueries($initialDirectionStrings);
+        $db->ExecuteQueries($initialMenusRecipesStrings);
+        $db->ExecuteQueries($initialRecipesIngredientsStrings);
+        $recipesIngredients = $db->ExecuteArrayQuery($checkRecipeIngredients);
+        echo '<pre>';
+        print_r($recipesIngredients);
+        echo '</pre>';
 
         echo '<pre>Initialized recipe database.</pre>';
 	}
@@ -171,34 +193,6 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 	}
 	
 	flush();
-	
-	function processQueries(&$db, $queries) {
-		foreach($queries as $query) {
-			try {
-				$result = sqlite_query($db, $query);
-
-                if(!$result)
-                    echo 'Could not process query: ', $query, PHP_EOL;
-			} catch (Exception $e) {
-				echo $e->getMessage();
-			}
-		}
-	}
-	
-	function processArrayQueries(&$db, $queries) {
-		foreach ($queries as $query) {
-			try {
-				$result = sqlite_array_query($db, $query);
-
-                if(!$result)
-                    echo 'Could not process query: ', $query, PHP_EOL;
-
-				printArray($result);
-			} catch (Exception $e) {
-				echo $e->getMessage();
-			}
-		}
-	}
 	
 	function printArray($a) {
 		echo '<pre>';

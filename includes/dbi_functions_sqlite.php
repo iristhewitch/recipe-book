@@ -30,11 +30,11 @@ abstract class SQLiteConnection
 			die( "Failed to connect to MySQL: (" . $this->command->connect_errno . ") " . $this->command->connect_error );
 		};*/
 
-        if (!isset($this->$dbMode) || empty($this->$dbMode)) {
+        if (!isset($this->dbMode) || empty($this->dbMode)) {
             $this->dbMode = $config["db"]["main"]["mode"];
         }
 
-        if($this->db = sqlite_open('recipe-book.sqlite', 0666, $error)) {
+        if($this->db = sqlite_open('recipe-book.sqlite', $this->dbMode, $error)) {
             //trace('Connected to the database!');
         } else {
             die('could not find or create database' . PHP_EOL . PHP_EOL . $error);
@@ -53,7 +53,7 @@ abstract class SQLiteConnection
 		$this->connect();
 
         try {
-            $result = sqlite_query($this->db, $query);
+            $result = sqlite_query($this->db, $query, SQLITE_ASSOC);
         } catch (Exception $e) {
             die($e->getMessage());
         }
@@ -69,7 +69,8 @@ abstract class SQLiteConnection
         $this->connect();
 
         try {
-            $result = sqlite_array_query($this->db, $query);
+            echo '<pre>'.$query.'</pre>';
+            $result = sqlite_array_query($this->db, $query, SQLITE_ASSOC);
         } catch (Exception $e) {
             die($e->getMessage());
         }
@@ -83,6 +84,7 @@ abstract class SQLiteConnection
 	public function ExecuteQueries($queries, $stopOnError = true)
 	{
 		$this->connect();
+        $results = array();
 
         for($i = 0; $i < count($queries); $i++) {
             try{

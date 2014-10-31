@@ -18,8 +18,8 @@ if($conn) {
                         measures.name,
                         ingredients.name
                 from ingredients, measures, recipes_ingredients
-                where recipes_ingredients.recipes_id = 1
-                  and recipes_ingredients.ingredients_id = $recipe_id
+                where recipes_ingredients.recipes_id = $recipe_id
+                  and recipes_ingredients.ingredients_id = ingredients.id
                   and recipes_ingredients.measures_id = measures.id";
 
     $results = $conn->ExecuteArrayQuery($query);

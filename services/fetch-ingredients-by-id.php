@@ -14,9 +14,9 @@ $recipe_id = $_GET["recipeID"];
 $conn = new SuperConnection();
 
 if($conn) {
-    $query = "select recipes_ingredients.measure_amount,
-                        measures.name,
-                        ingredients.name
+    $query = "select recipes_ingredients.measure_amount amount,
+                        measures.name measure_name,
+                        ingredients.name name
                 from ingredients, measures, recipes_ingredients
                 where recipes_ingredients.recipes_id = $recipe_id
                   and recipes_ingredients.ingredients_id = ingredients.id

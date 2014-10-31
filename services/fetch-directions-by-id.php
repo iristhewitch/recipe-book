@@ -16,9 +16,9 @@ $conn = new SuperConnection();
 
 if($conn) {
     $query = "select directions.step_number step,
-				directions.direction direction
+				directions.direction_text direction
 			from directions
-			where directions.recipe_id = $recipe_id";
+			where directions.recipes_id = $recipe_id";
 
     $results = $conn->ExecuteArrayQuery($query);
     $json = json_encode($results);

@@ -10,7 +10,7 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 //require_once(INCLUDES_PATH . '/debug_functions.php');
 //TurnDebugOff();
 
-$recipe_id = $_GET['recipe_id'];
+$recipe_id = $_GET['recipeID'];
 
 $conn = new SuperConnection();
 

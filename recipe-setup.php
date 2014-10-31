@@ -26,12 +26,21 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 		$createStrings = array(
 			'create table measures (id integer not null, name text, primary key (id))',
 			'create table types (id integer not null, name text not null, primary key (id))',
-			'create table menus (id integer not null, name text not null, start_date text not null, end_date text not null, primary key (id))',
-			'create table ingredients(id integer not null, name text not null, types_id integer not null, primary key (id), foreign key (types_id) references types (id))',
-			'create table recipes (id integer not null, name text not null, min_time integer not null, max_time integer not null, servings integer not null, primary key (id))',
-			'create table directions (id integer not null, recipes_id integer not null, step_number integer not null, direction_text text not null, primary key (id), foreign key (recipes_id) references recipes (id))',
-			'create table menus_recipes(menus_id integer not null, recipes_id integer not null, primary key (menus_id, recipes_id), foreign key (menus_id) references menus (id), foreign key (recipes_id) references recipes (id))',
-            'create table recipes_ingredients(recipes_id integer not null, ingredients_id integer not null, measures_id integer not null, measure_amount double not null, primary key (recipes_id, ingredients_id), foreign key (ingredients_id) references ingredients (id), foreign key (recipes_id) references recipes (id), foreign key (measures_id) references measures (id))'
+			'create table menus (id integer not null, name text not null, start_date text not null,
+              end_date text not null, primary key (id))',
+			'create table ingredients(id integer not null, name text not null, types_id integer not null,
+              primary key (id), foreign key (types_id) references types (id))',
+			'create table recipes (id integer not null, name text not null, min_time integer not null,
+              max_time integer not null, servings integer not null, primary key (id))',
+			'create table directions (id integer not null, recipes_id integer not null, step_number integer not null,
+              direction_text text not null, primary key (id), foreign key (recipes_id) references recipes (id))',
+			'create table menus_recipes(menus_id integer not null, recipes_id integer not null,
+              primary key (menus_id, recipes_id), foreign key (menus_id) references menus (id),
+              foreign key (recipes_id) references recipes (id))',
+            'create table recipes_ingredients(recipes_id integer not null, ingredients_id integer not null,
+              measures_id integer not null, measure_amount real not null, primary key (recipes_id, ingredients_id),
+              foreign key (ingredients_id) references ingredients (id), foreign key (recipes_id) references recipes (id),
+              foreign key (measures_id) references measures (id))'
 		);
 		
 		$measureStrings = array(
@@ -150,13 +159,13 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 		);
 		
 		$checkRecipeIngredients =
-			'select recipes_ingredients.measure_amount,
+            "select recipes_ingredients.measure_amount,
 	                measures.name,
 	                ingredients.name
             from ingredients, measures, recipes_ingredients
             where recipes_ingredients.recipes_id = 1
 	          and recipes_ingredients.ingredients_id = ingredients.id
-	          and recipes_ingredients.measures_id = measures.id';
+	          and recipes_ingredients.measures_id = measures.id";
 		
 		$checkRecipeDirections =
 			'select directions.step_number step,
@@ -170,6 +179,8 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
             where menus_recipes.recipe_id = recipes.id
 	          and menus_recipes.menus_id = 1';
 
+        $checkTables = "SELECT name FROM sqlite_master WHERE type='table'";
+
         $db->ExecuteQueries($dropStrings);
         $db->ExecuteQueries($createStrings);
         $db->ExecuteQueries($measureStrings);
@@ -180,8 +191,10 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
         $db->ExecuteQueries($initialMenusRecipesStrings);
         $db->ExecuteQueries($initialRecipesIngredientsStrings);
         $recipesIngredients = $db->ExecuteArrayQuery($checkRecipeIngredients);
+        $tables = $db->ExecuteArrayQuery($checkTables);
         echo '<pre>';
-        print_r($recipesIngredients);
+        //print_r($recipesIngredients);
+        print_r($tables);
         echo '</pre>';
 
         echo '<pre>Initialized recipe database.</pre>';

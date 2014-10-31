@@ -37,6 +37,9 @@ $config = array(
 	ex. require_once(LIBRARY_PATH . "Paginator.php")
 
 */
+defined("INDEX_PATH")
+    or define("INDEX_PATH", realpath(dirname(__FILE__)));
+
 defined("INCLUDES_PATH")
 	or define("INCLUDES_PATH", realpath(dirname(__FILE__) . '/includes'));
 

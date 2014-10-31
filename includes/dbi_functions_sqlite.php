@@ -1,6 +1,6 @@
 <?php
 /* __________ CONFIGURATION ____________ */
-if (!defined("INCLUDES_PATH")){
+if (!defined("INCLUDES_PATH") or !defined("INDEX_PATH")){
 	require_once("../config.php");
 }
 /* ¯¯¯¯¯¯¯¯¯¯ CONFIGURATION ¯¯¯¯¯¯¯¯¯¯¯¯ */
@@ -34,7 +34,7 @@ abstract class SQLiteConnection
             $this->dbMode = $config["db"]["main"]["mode"];
         }
 
-        if($this->db = sqlite_open('recipe-book.sqlite', $this->dbMode, $error)) {
+        if($this->db = sqlite_open(INDEX_PATH . '/recipe-book.sqlite', $this->dbMode, $error)) {
             //trace('Connected to the database!');
         } else {
             die('could not find or create database' . PHP_EOL . PHP_EOL . $error);
@@ -69,7 +69,7 @@ abstract class SQLiteConnection
         $this->connect();
 
         try {
-            echo '<pre>'.$query.'</pre>';
+            //echo '<pre>'.$query.'</pre>';
             $result = sqlite_array_query($this->db, $query, SQLITE_ASSOC);
         } catch (Exception $e) {
             die($e->getMessage());
@@ -88,8 +88,7 @@ abstract class SQLiteConnection
 
         for($i = 0; $i < count($queries); $i++) {
             try{
-                //echo '<pre>'.$queries[$i].'</pre>';
-                $results[$i] = sqlite_query($this->db,$queries[$i]);
+                $results[$i] = $this->ExecuteQuery($queries[$i]);
             } catch (Exception $e) {
                 if($stopOnError)
                     die($e->getMessage());

@@ -1,3 +1,8 @@
-<ul class="list-unstyled">
-    <li ng-repeat="ingredient in recipe.ingredients">{{"" + ingredient.measure_amount + " " + ingredient.measure + " " + ingredient.name}}</li>
-</ul>
+<div class="row">
+    <div class="col-sm-5">
+        <a href="#" class="ingredient list-group-item editable editable-click" ng-repeat="ingredient in recipe.ingredients" ng-attr-data-recipe="{{ingredient.recipe_id}}" ng-attr-data-ingredient="{{ingredient.id}}" data-original-title title>{{"" + ingredient.amount + " " + ingredient.measure_name + " " + ingredient.name}}</a>
+        <!--<ul class="list-group list-unstyled">
+            <li class="list-group-item" ng-repeat="ingredient in recipe.ingredients">{{"" + ingredient.measure_amount + " " + ingredient.measure + " " + ingredient.name}}</li>
+        </ul>-->
+    </div>
+</div>

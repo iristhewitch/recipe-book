@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-sm-5">
+        <!--<ul>
+            <li class="list-group-item"
+                    ng-repeat="ingredient in recipeBook.allIngredients"
+                    ng-attr-data-ingredient="{{ingredient.id}}">
+                <span>{{ingredient.ingredient_name}} ({{ingredient.type_name}})</span>
+            </li>
+        </ul>-->
+
+        <a href class="list-group-item"
+            ng-repeat="ingredient in recipeBook.allIngredients"
+            ng-attr-data-ingredient="{{ingredient.ingredient_id}}"
+            editable-text="ingredient.ingredient_name">{{ingredient.ingredient_name}}
+            <!--<select ng-model="ingredientType" ng-options="type.name for type in recipeBook.allTypes"></select>-->
+        </a>
+    </div>
+</div>

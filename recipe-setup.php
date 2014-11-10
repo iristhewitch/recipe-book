@@ -15,6 +15,7 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 		$dropStrings = array(
 			'drop table recipes_ingredients',
 			'drop table menus_recipes',
+            'drop table ingredients_types',
 			'drop table directions',
 			'drop table recipes',
 			'drop table ingredients',
@@ -28,12 +29,14 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 			'create table types (id integer not null, name text not null, primary key (id))',
 			'create table menus (id integer not null, name text not null, start_date text not null,
               end_date text not null, primary key (id))',
-			'create table ingredients(id integer not null, name text not null, types_id integer not null,
-              primary key (id), foreign key (types_id) references types (id))',
+			'create table ingredients(id integer not null, name text not null, primary key (id))',
 			'create table recipes (id integer not null, name text not null, min_time integer not null,
               max_time integer not null, servings integer not null, primary key (id))',
 			'create table directions (id integer not null, recipes_id integer not null, step_number integer not null,
               direction_text text not null, primary key (id), foreign key (recipes_id) references recipes (id))',
+            'create table ingredients_types(ingredients_id integer not null, types_id integer not null,
+              primary key (types_id, ingredients_id), foreign key (types_id) references types (id),
+              foreign key(ingredients_id) references ingredients (id))',
 			'create table menus_recipes(menus_id integer not null, recipes_id integer not null,
               primary key (menus_id, recipes_id), foreign key (menus_id) references menus (id),
               foreign key (recipes_id) references recipes (id))',
@@ -58,7 +61,7 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 			'insert into measures (name) values ("package(s)")'										// 12
 		);
 		
-		$ingredientTypeStrings = array(
+		$initialTypeStrings = array(
 			'insert into types (name) values ("Dairy")',											// 1
 			'insert into types (name) values ("Breads, Grains and Pasta")',							// 2
 			'insert into types (name) values ("Pre-packaged Stuff")',								// 3
@@ -78,20 +81,39 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
             // recipe id
             // type
             // name
-            'insert into ingredients (types_id, name) values (6, "Ground chicken")',            // 1
-            'insert into ingredients (types_id, name) values (4, "White navy beans")',          // 2
-            'insert into ingredients (types_id, name) values (4, "Fire roasted tomatoes")',     // 3
-            'insert into ingredients (types_id, name) values (5, "Chicken broth")',             // 4
-			'insert into ingredients (types_id, name) values (3, "Buffalo wing sauce")',        // 5
-			'insert into ingredients (types_id, name) values (3, "Ranch dressing mix")',        // 6
-			'insert into ingredients (types_id, name) values (4, "Corn")',                      // 7
-			'insert into ingredients (types_id, name) values (8, "Onion powder")',              // 8
-			'insert into ingredients (types_id, name) values (8, "Garlic powder")',             // 9
-			'insert into ingredients (types_id, name) values (8, "Celery salt")',               // 10
-			'insert into ingredients (types_id, name) values (8, "Dried cilantro")',            // 11
-			'insert into ingredients (types_id, name) values (8, "Salt")',                      // 12
-			'insert into ingredients (types_id, name) values (1, "Cream cheese")',              // 13
-			'insert into ingredients (types_id, name) values (1, "Blue cheese crumbles")'       // 14
+            'insert into ingredients (name) values ("Ground chicken")',            // 1
+            'insert into ingredients (name) values ("White navy beans")',          // 2
+            'insert into ingredients (name) values ("Fire roasted tomatoes")',     // 3
+            'insert into ingredients (name) values ("Chicken broth")',             // 4
+			'insert into ingredients (name) values ("Buffalo wing sauce")',        // 5
+			'insert into ingredients (name) values ("Ranch dressing mix")',        // 6
+			'insert into ingredients (name) values ("Corn")',                      // 7
+			'insert into ingredients (name) values ("Onion powder")',              // 8
+			'insert into ingredients (name) values ("Garlic powder")',             // 9
+			'insert into ingredients (name) values ("Celery salt")',               // 10
+			'insert into ingredients (name) values ("Dried cilantro")',            // 11
+			'insert into ingredients (name) values ("Salt")',                      // 12
+			'insert into ingredients (name) values ("Cream cheese")',              // 13
+			'insert into ingredients (name) values ("Blue cheese crumbles")'       // 14
+        );
+
+        $initialIngredientsTypesStrings = array(
+            // type id
+            // ingredient id
+            'insert into ingredients_types(ingredients_id, types_id) values (1, 6)',
+            'insert into ingredients_types(ingredients_id, types_id) values (2, 4)',
+            'insert into ingredients_types(ingredients_id, types_id) values (3, 4)',
+            'insert into ingredients_types(ingredients_id, types_id) values (4, 5)',
+            'insert into ingredients_types(ingredients_id, types_id) values (5, 3)',
+            'insert into ingredients_types(ingredients_id, types_id) values (6, 3)',
+            'insert into ingredients_types(ingredients_id, types_id) values (7, 4)',
+            'insert into ingredients_types(ingredients_id, types_id) values (8, 8)',
+            'insert into ingredients_types(ingredients_id, types_id) values (9, 8)',
+            'insert into ingredients_types(ingredients_id, types_id) values (10, 8)',
+            'insert into ingredients_types(ingredients_id, types_id) values (11, 8)',
+            'insert into ingredients_types(ingredients_id, types_id) values (12, 8)',
+            'insert into ingredients_types(ingredients_id, types_id) values (13, 1)',
+            'insert into ingredients_types(ingredients_id, types_id) values (14, 1)'
         );
 
 		$initialRecipeStrings = array(
@@ -180,16 +202,19 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 	          and menus_recipes.menus_id = 1';
 
         $checkTables = "SELECT name FROM sqlite_master WHERE type='table'";
+        $checkIngredientsTypes = "select * from ingredients_types";
 
         $db->ExecuteQueries($dropStrings);
         $db->ExecuteQueries($createStrings);
         $db->ExecuteQueries($measureStrings);
         $db->ExecuteQueries($initialMenuStrings);
+        $db->ExecuteQueries($initialTypeStrings);
         $db->ExecuteQueries($initialIngredientStrings);
         $db->ExecuteQueries($initialRecipeStrings);
         $db->ExecuteQueries($initialDirectionStrings);
         $db->ExecuteQueries($initialMenusRecipesStrings);
         $db->ExecuteQueries($initialRecipesIngredientsStrings);
+        $db->ExecuteQueries($initialIngredientsTypesStrings);
         $recipesIngredients = $db->ExecuteArrayQuery($checkRecipeIngredients);
         $tables = $db->ExecuteArrayQuery($checkTables);
         echo '<pre>';

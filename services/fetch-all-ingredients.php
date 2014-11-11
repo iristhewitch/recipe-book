@@ -20,7 +20,8 @@ if($conn) {
                 ingredients.name ingredient_name
               from ingredients, types, ingredients_types
               where ingredients_types.types_id = types.id
-              and ingredients_types.ingredients_id = ingredients.id";
+              and ingredients_types.ingredients_id = ingredients.id
+              order by types.name, ingredients.name";
 
     $results = $conn->ExecuteArrayQuery($query);
     $json = json_encode($results);

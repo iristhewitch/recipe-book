@@ -2,85 +2,67 @@
 <html ng-app="recipeBook">
     <head lang="en">
         <meta charset="UTF-8">
-        <title>Arasaia - Recipe Book</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Arasaia - recipe-book</title>
     </head>
     <body ng-controller="RecipeBookController as recipeBook">
-        <p>1 + 2 = {{ 1 + 2 }}</p>
-        <!--section class="tab" ng-controller="TabController as tab">
-            <ul class="nav nav-pills">
-                <li ng-class="{active: tab.isSet(1)}">
-                    <a href ng-click="tab.setTab(1)">Description</a>
-                </li>
-                <li ng-class="{active: tab.isSet(2)}">
-                    <a href ng-click="tab.setTab(2)">Specifications</a>
-                </li>
-                <li ng-class="{active: tab.isSet(3)}">
-                    <a href ng-click="tab.setTab(3)">Reviews</a>
-                </li>
-            </ul>
-            <div class="panel" ng-show="tab.isSet(1)">
-                <h4>Description</h4>
-                <p>Product description</p>
-            </div>
-            <div class="panel" ng-show="tab.isSet(2)">
-                <h4>Specifications</h4>
-                <p>Product specifications</p>
-            </div>
-            <div class="panel" ng-show="tab.isSet(3)">
-                <h4>Reviews</h4>
-                <p>Product reviews</p>
-            </div>
-        </section>-->
-        <section ng-controller="TabController as tab">
-            <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
-                <div class="container">
-                    <div class="navbar-header">
-                        <!-- the hamburger menu when the viewport too small -->
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                            <span class="sr-only">Toggle navigation</span>
-                            <!-- creates the "hamburger" look -->
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="#">recipe-book</a>
-                        <span class="navbar-brand">recipe-book</span>
+        <div class="container">
+            <p>1 + 2 = {{ 1 + 2 }}</p>
+            <section ng-controller="TabController as tab">
+                <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <!-- the hamburger menu when the viewport is too small -->
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                <!-- creates the "hamburger" look -->
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="#">recipe-book</a>
+                        </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li ng-class="{active:tab.isSet(1)}"><a href ng-click="tab.setTab(1)">menus</a></li>
+                                <li ng-class="{active:tab.isSet(2)}"><a href ng-click="tab.setTab(2)">recipes</a></li>
+                                <li ng-class="{active:tab.isSet(3)}"><a href ng-click="tab.setTab(3)">ingredients</a></li>
+                                <li ng-class="{active:tab.isSet(4)}"><a href ng-click="tab.setTab(4)">measures</a></li>
+                                <li ng-class="{active:tab.isSet(5)}"><a href ng-click="tab.setTab(5)">types</a></li>
+                                <!--<li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">dropdown<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#">Action</a></li>
+                                        <li><a href="#">Another action</a></li>
+                                        <li><a href="#">Something else here</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header">Nav header</li>
+                                        <li><a href="#">Separated link</a></li>
+                                        <li><a href="#">One more separated link</a></li>
+                                    </ul>
+                                </li>-->
+                            </ul>
+                        </div><!--/.nav-collapse -->
                     </div>
-                    <div id="navbar" class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li ng-class="{active:tab.isSet(1)}"><a href ng-click="tab.setTab(1)">menus</a></li>
-                            <li ng-class="{active:tab.isSet(2)}"><a href ng-click="tab.setTab(2)">recipes</a></li>
-                            <li ng-class="{active:tab.isSet(3)}"><a href ng-click="tab.setTab(3)">ingredients</a></li>
-                            <li ng-class="{active:tab.isSet(4)}"><a href ng-click="tab.setTab(4)">measures</a></li>
-                            <!--<li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">dropdown<span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li class="dropdown-header">Nav header</li>
-                                    <li><a href="#">Separated link</a></li>
-                                    <li><a href="#">One more separated link</a></li>
-                                </ul>
-                            </li>-->
-                        </ul>
-                    </div><!--/.nav-collapse -->
+                </nav>
+                <div class="tab" ng-show="tab.isSet(1)">
+                    This is the list of menus.
                 </div>
-            </nav>
-            <div class="panel" ng-show="tab.isSet(1)">
-                This is the list of menus.
-            </div>
-            <div class="panel" ng-show="tab.isSet(2)">
-                This is the list of recipes.
-            </div>
-            <div class="panel" ng-show="tab.isSet(3)">
-                <all-ingredients></all-ingredients>
-            </div>
-            <div class="panel" ng-show="tab.isSet(4)">
-                This is the list of measures.
-            </div>
-        </section>
+                <div class="tab" ng-show="tab.isSet(2)">
+                    This is the list of recipes.
+                </div>
+                <div class="tab" ng-show="tab.isSet(3)">
+                    <all-ingredients></all-ingredients>
+                </div>
+                <div class="tab" ng-show="tab.isSet(4)">
+                    This is the list of measures.
+                </div>
+                <div class="tab" ng-show="tab.isSet(5)">
+                    This is the list of food types.
+                    <all-types></all-types>
+                </div>
+            </section>
+        </div>
     </body>
 
     <!-- jQuery -->

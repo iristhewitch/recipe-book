@@ -14,4 +14,11 @@
             templateUrl: 'templates/all-ingredients.html'
         };
     });
+
+    app.directive('allTypes', function(){
+       return {
+         restrict: 'E',
+         templateUrl: 'templates/all-types.html'
+       };
+    });
 })();

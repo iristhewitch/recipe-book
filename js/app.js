@@ -16,24 +16,23 @@
 
         $http.get('services/fetch-all-ingredients.php').success(function(data){
             recipeBook.allIngredients = data;
-            console.log(allIngredients);
+            //console.log(recipeBook.allIngredients);
         });
 
         $http.get('services/fetch-all-types.php').success(function(data){
             recipeBook.allTypes = data;
+            //console.log(recipeBook.allTypes);
         })
     }]);
 
     app.controller('TabController', function(){
-        this.tab = 3;
+        this.tab = 5;
 
         this.setTab = function(newValue){
-            //console.log('setting tab to ' + newValue);
             this.tab = newValue;
         };
 
         this.isSet = function(tabName){
-            //console.log('checking ' + tabName + ' = ' + this.tab);
             return this.tab === tabName;
         };
     });

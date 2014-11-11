@@ -21,7 +21,7 @@ if($conn) {
 
     $results = $conn->ExecuteArrayQuery($query);
     $json = json_encode($results);
-    echo '<pre>', print_r($results, true), '</pre>';
+    echo $json;
 }
 //echo '<pre>', json_encode($results, JSON_PRETTY_PRINT), '</pre>';
 //echo '<pre>', json_encode($prettyJson), '</pre>';

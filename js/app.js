@@ -27,7 +27,7 @@
         this.showType = function(ingredientTypeID) {
             //console.dir(recipeBook.allTypes);
             var selected = $filter('filter')(recipeBook.allTypes, {id: ingredientTypeID});
-            //console.log(selected);
+            console.log(selected);
             return (ingredientTypeID && selected.length) ? selected[0].name : 'Not set';
         };
     }]);

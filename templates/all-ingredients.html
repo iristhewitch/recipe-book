@@ -4,8 +4,14 @@
             class="list-group-item"
             ng-repeat="ingredient in recipeBook.allIngredients"
             ng-attr-data-ingredient="{{ingredient.ingredient_id}}">
-            <span editable-text="ingredient.ingredient_name">{{ingredient.ingredient_name}}</span>
-            (<select editable-select="type" e-ng-options="type.id as type.name for type in recipeBook.allTypes" ng-attr-value="{{type.name}}"></select><!--<span editable-text="ingredient.type_name">{{ingredient.type_name}}</span>-->)
+            <span editable-text="ingredient.ingredient_name">
+                {{ingredient.ingredient_name}}
+            </span>
+            (<span href
+                  editable-select="ingredient.type_id"
+                  e-ng-options="type.id as type.name for type in recipeBook.allTypes">
+            {{  recipeBook.showType(ingredient.type_id) }}
+            </span>)
         </a>
     </div>
 </div>

@@ -17,6 +17,7 @@ if($conn) {
 
     $query = "select ingredients.id ingredient_id,
                 types.name type_name,
+                types.id type_id,
                 ingredients.name ingredient_name
               from ingredients, types, ingredients_types
               where ingredients_types.types_id = types.id

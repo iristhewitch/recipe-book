@@ -7,7 +7,7 @@
         editableOptions.theme = 'bs3';
     });
 
-    app.controller('RecipeBookController', ['$http', function($http){
+    app.controller('RecipeBookController', ['$http', '$filter', function($http, $filter){
         var recipeBook = this;
 
         /*$http.get('services/fetch-ingredients-by-id.php?recipeID=1').success(function(data){
@@ -23,10 +23,17 @@
             recipeBook.allTypes = data;
             //console.log(recipeBook.allTypes);
         })
+
+        this.showType = function(ingredientTypeID) {
+            //console.dir(recipeBook.allTypes);
+            var selected = $filter('filter')(recipeBook.allTypes, {id: ingredientTypeID});
+            //console.log(selected);
+            return (ingredientTypeID && selected.length) ? selected[0].name : 'Not set';
+        };
     }]);
 
     app.controller('TabController', function(){
-        this.tab = 5;
+        this.tab = 3;
 
         this.setTab = function(newValue){
             this.tab = newValue;

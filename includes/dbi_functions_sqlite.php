@@ -53,7 +53,7 @@ abstract class SQLiteConnection
 		$this->connect();
 
         try {
-            $result = sqlite_query($this->db, $query, SQLITE_ASSOC);
+            $result = sqlite_query($this->db, $query);
         } catch (Exception $e) {
             die($e->getMessage());
         }

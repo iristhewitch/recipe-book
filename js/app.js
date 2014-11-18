@@ -1,5 +1,5 @@
 (function() {
-    var app = angular.module('recipeBook', ['xeditable','ingredients-directives']);
+    var app = angular.module('recipeBook', ['xeditable','piece-directives']);
 
     app.run(function(editableOptions, editableThemes){
         editableThemes.bs3.inputClass = 'input-sm';
@@ -24,6 +24,10 @@
             //console.log(recipeBook.allTypes);
         });
 
+        $http.get('services/fetch-all-measures.php').success(function(data){
+           recipeBook.allMeasures = data;
+        });
+
         this.showType = function(ingredientTypeID) {
             //console.dir(recipeBook.allTypes);
             var selected = $filter('filter')(recipeBook.allTypes, {id: ingredientTypeID});
@@ -32,7 +36,6 @@
         };
 
         $scope.updateIngredientName = function(data, ingredientID){
-            console.log("new name: " + data + "; " + ingredientID);
             $http.post('services/update-ingredient-by-id.php', {id: ingredientID, name: data}).
                 success(function(successData){
                     return successData === "true";
@@ -44,9 +47,34 @@
         };
 
         $scope.updateIngredientType = function(data, ingredientID){
-            console.log("new type: " + data + "; " + ingredientID);
             $http.post('services/update-ingredient-by-id.php', {id: ingredientID, type: data}).
                 success(function(successData){
+                    return successData === "true";
+                }).
+                error(function(errorData){
+                    console.log("errorData: " + errorData);
+                    return false;
+                });
+        };
+
+        $scope.updateTypeName = function(data, typeID){
+            console.log("new type name: " + data + "; " + typeID);
+            $http.post('services/update-type-by-id.php', {id: typeID, name: data}).
+                success(function(successData){
+                    console.log(successData);
+                    return successData === "true";
+                }).
+                error(function(errorData){
+                    console.log("errorData: " + errorData);
+                    return false;
+                });
+        };
+
+        $scope.updateMeasureName = function(data, measureID){
+            console.log("new type name: " + data + "; " + measureID);
+            $http.post('services/update-measure-by-id.php', {id: measureID, name: data}).
+                success(function(successData){
+                    console.log(successData);
                     return successData === "true";
                 }).
                 error(function(errorData){

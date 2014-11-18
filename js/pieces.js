@@ -1,5 +1,5 @@
 (function() {
-    var app = angular.module('ingredients-directives', []);
+    var app = angular.module('piece-directives', []);
 
     app.directive('recipeIngredients', function () {
         return {
@@ -21,4 +21,25 @@
          templateUrl: 'templates/all-types.html'
        };
     });
+
+    app.directive('allMeasures', function(){
+       return {
+           restrict: 'E',
+           templateUrl: 'templates/all-measures.html'
+       };
+    });
+
+    /*app.directive('allRecipes', function(){
+        return {
+            restrict: 'E',
+            templateUrl: 'templates/all-recipes.html'
+        };
+    });
+
+    app.directive('allMenus', function(){
+        return {
+            restrict: 'E',
+            templateUrl: 'templates/all-menus.html'
+        };
+    });*/
 })();

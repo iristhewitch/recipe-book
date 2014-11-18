@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col-sm-5">
+        <a href="#" class="list-group-item"
+            ng-repeat="measure in recipeBook.allMeasures"
+            ng-attr-data-type-id="{{measure.id}}">
+            <span
+                editable-text="measure.name"
+                onbeforesave="updateMeasureName($data, measure.id)">
+                {{measure.name}}
+            </span>
+        </a>
+    </div>
+</div>

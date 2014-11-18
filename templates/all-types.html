@@ -1,9 +1,13 @@
 <div class="row">
     <div class="col-sm-5">
-        <a href class="list-group-item"
+        <a href="#" class="list-group-item"
             ng-repeat="type in recipeBook.allTypes"
             ng-attr-data-type-id="{{type.id}}">
-            <span editable-text="type.name">{{type.name}}</span>
+            <span
+                editable-text="type.name"
+                onbeforesave="updateTypeName($data, type.id)">
+                {{type.name}}
+            </span>
         </a>
     </div>
 </div>

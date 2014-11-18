@@ -5,7 +5,8 @@
             ng-attr-data-type-id="{{type.id}}">
             <span
                 editable-text="type.name"
-                onbeforesave="updateTypeName($data, type.id)">
+                onbeforesave="updateTypeName($data, type.id)"
+                class="list-group-item-heading">
                 {{type.name}}
             </span>
         </a>

@@ -12,11 +12,20 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 $conn = new SuperConnection();
 
 if($conn) {
+    //$query = "select * from ingredients";
+    //$query = "select * from types";
 
-    $query = "select measures.id id,
-                measures.name name
-              from measures
-              order by measures.name";
+    $query = "select types.id id,
+                types.name name
+              from types";
+    $query = "select recipes.id id,
+                recipes.name name,
+                recipes.min_time minTime,
+                recipes.max_time maxTime,
+                recipes.servings servings
+              from recipes
+              order by recipes.name;
+    ";
 
     $results = $conn->ExecuteArrayQuery($query);
     $json = json_encode($results);

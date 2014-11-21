@@ -1,0 +1,13 @@
+/*.delete-item {
+    float: right;
+    margin-right: 2px;
+    color: #fff;
+    padding: 2px 6px;
+    background-color: #E74C3C;
+    border-radius: 25%;
+}*/
+
+.delete-item {
+    float: right;
+    /*padding: 2px 2px;*/
+}

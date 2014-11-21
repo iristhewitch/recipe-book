@@ -1,13 +1,6 @@
 (function() {
     var app = angular.module('piece-directives', []);
 
-    app.directive('recipeIngredients', function () {
-        return {
-            restrict: 'E',
-            templateUrl: '<p>This is a template</p>'//'templates/display-ingredients.html'
-        };
-    });
-
     app.directive('allIngredients', function () {
         return {
             restrict: 'E',
@@ -16,30 +9,54 @@
     });
 
     app.directive('allTypes', function(){
-       return {
-         restrict: 'E',
-         templateUrl: 'templates/all-types.html'
-       };
+        return {
+            restrict: 'E',
+            templateUrl: 'templates/all-types.html'
+        };
     });
 
     app.directive('allMeasures', function(){
-       return {
-           restrict: 'E',
-           templateUrl: 'templates/all-measures.html'
-       };
+        return {
+            restrict: 'E',
+            templateUrl: 'templates/all-measures.html'
+        };
     });
 
-    /*app.directive('allRecipes', function(){
+    app.directive('allRecipes', function(){
         return {
             restrict: 'E',
             templateUrl: 'templates/all-recipes.html'
         };
     });
 
-    app.directive('allMenus', function(){
+    /*app.directive('allMenus', function(){
         return {
             restrict: 'E',
             templateUrl: 'templates/all-menus.html'
         };
     });*/
+
+    app.directive('icNavAutoclose', function () {
+        console.log("icNavAutoclose");
+        return function (scope, elm, attrs) {
+            var collapsible = $(elm).find(".navbar-collapse");
+            var visible = false;
+
+            collapsible.on("show.bs.collapse", function () {
+                visible = true;
+            });
+
+            collapsible.on("hide.bs.collapse", function () {
+                visible = false;
+            });
+
+            $(elm).find("a").each(function (index, element) {
+                $(element).click(function (e) {
+                    if (visible && "auto" == collapsible.css("overflow-y")) {
+                        collapsible.collapse("hide");
+                    }
+                });
+            });
+        };
+    });
 })();

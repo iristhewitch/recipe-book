@@ -22,7 +22,8 @@ if($conn) {
                 from ingredients, measures, recipes_ingredients
                 where recipes_ingredients.recipes_id = $recipe_id
                   and recipes_ingredients.ingredients_id = ingredients.id
-                  and recipes_ingredients.measures_id = measures.id";
+                  and recipes_ingredients.measures_id = measures.id
+                  order by recipes_ingredients.ingredients_id";
 
     $results = $conn->ExecuteArrayQuery($query);
     $json = json_encode($results);

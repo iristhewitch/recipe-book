@@ -9,6 +9,7 @@
 
     app.controller('RecipeBookController', ['$scope', '$http', '$filter', function($scope, $http, $filter){
         var recipeBook = this;
+        $scope.selectedIndex = 0;
 
         /*$http.get('services/fetch-ingredients-by-id.php?recipeID=1').success(function(data){
          recipeBook.ingredients = data;
@@ -26,6 +27,10 @@
 
         $http.get('services/fetch-all-measures.php').success(function(data){
            recipeBook.allMeasures = data;
+        });
+
+        $http.get('services/fetch-all-recipes.php').success(function(data){
+            recipeBook.allRecipes = data;
         });
 
         this.showType = function(ingredientTypeID) {
@@ -82,10 +87,15 @@
                     return false;
                 });
         };
+
+        $scope.itemClicked = function ($index) {
+            console.log($index);
+            $scope.selectedIndex = $index;
+        }
     }]);
 
     app.controller('TabController', function(){
-        this.tab = 3;
+        this.tab = 2;
 
         this.setTab = function(newValue){
             this.tab = newValue;

@@ -9,7 +9,7 @@
         <div class="container">
             <p>1 + 2 = {{ 1 + 2 }}</p>
             <section ng-controller="TabController as tab">
-                <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+                <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation" ic-nav-autoclose>
                     <div class="container">
                         <div class="navbar-header">
                             <!-- the hamburger menu when the viewport is too small -->
@@ -29,18 +29,6 @@
                                 <li ng-class="{active:tab.isSet(3)}"><a href ng-click="tab.setTab(3)">ingredients</a></li>
                                 <li ng-class="{active:tab.isSet(4)}"><a href ng-click="tab.setTab(4)">measures</a></li>
                                 <li ng-class="{active:tab.isSet(5)}"><a href ng-click="tab.setTab(5)">types</a></li>
-                                <!--<li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">dropdown<span class="caret"></span></a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">Action</a></li>
-                                        <li><a href="#">Another action</a></li>
-                                        <li><a href="#">Something else here</a></li>
-                                        <li class="divider"></li>
-                                        <li class="dropdown-header">Nav header</li>
-                                        <li><a href="#">Separated link</a></li>
-                                        <li><a href="#">One more separated link</a></li>
-                                    </ul>
-                                </li>-->
                             </ul>
                         </div><!--/.nav-collapse -->
                     </div>
@@ -49,7 +37,7 @@
                     This is the list of menus.
                 </div>
                 <div class="tab" ng-show="tab.isSet(2)">
-                    This is the list of recipes.
+                    <all-recipes></all-recipes>
                 </div>
                 <div class="tab" ng-show="tab.isSet(3)">
                     <all-ingredients></all-ingredients>
@@ -58,7 +46,6 @@
                     <all-measures></all-measures>
                 </div>
                 <div class="tab" ng-show="tab.isSet(5)">
-                    This is the list of food types.
                     <all-types></all-types>
                 </div>
             </section>

@@ -17,7 +17,8 @@ if($conn) {
 
     $query = "select types.id id,
                 types.name name
-              from types";
+              from types
+              order by types.name";
 
     $results = $conn->ExecuteArrayQuery($query);
     $json = json_encode($results);

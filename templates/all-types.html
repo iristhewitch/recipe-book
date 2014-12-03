@@ -9,7 +9,13 @@
                 class="list-group-item-heading">
                 {{type.name}}
             </span>
-            <button type="button" class="btn btn-primary btn-xs delete-item">remove</button>
+            <span class="glyphicon glyphicon-remove float-right" ng-click="removeTypeByID(type.id)"></span>
         </a>
+        <div id="addType">
+            <a href="#" class="list-group-item">
+                <input type="text" ng-model="recipeBook.newTypeName" placeholder="New Type" id="newTypeNameInput"/>
+                <span class="glyphicon glyphicon-plus float-right" ng-click="addType()"></span>
+            </a>
+        </div>
     </div>
 </div>

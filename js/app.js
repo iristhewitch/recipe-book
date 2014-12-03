@@ -1,5 +1,10 @@
 (function() {
     var app = angular.module('recipeBook', ['xeditable','piece-directives']);
+    var MENU_TAB = 1;
+    var RECIPE_TAB = 2;
+    var INGREDIENT_TAB = 3;
+    var MEASURE_TAB = 4;
+    var TYPE_TAB = 5;
 
     app.run(function(editableOptions, editableThemes){
         editableThemes.bs3.inputClass = 'input-sm';
@@ -9,20 +14,16 @@
 
     app.controller('RecipeBookController', ['$scope', '$http', '$filter', function($scope, $http, $filter){
         var recipeBook = this;
-        $scope.selectedIndex = 0;
-
-        /*$http.get('services/fetch-ingredients-by-id.php?recipeID=1').success(function(data){
-         recipeBook.ingredients = data;
-        });*/
+        $scope.selectedRecipeIndex = 0;
+        $scope.selectedMenuIndex = 0;
+        recipeBook.newTypeName = " ";
 
         $http.get('services/fetch-all-ingredients.php').success(function(data){
             recipeBook.allIngredients = data;
-            //console.log(recipeBook.allIngredients);
         });
 
         $http.get('services/fetch-all-types.php').success(function(data){
             recipeBook.allTypes = data;
-            //console.log(recipeBook.allTypes);
         });
 
         $http.get('services/fetch-all-measures.php').success(function(data){
@@ -34,12 +35,33 @@
         });
 
         this.showType = function(ingredientTypeID) {
-            //console.dir(recipeBook.allTypes);
             var selected = $filter('filter')(recipeBook.allTypes, {id: ingredientTypeID});
-            //console.log(selected);
             return (ingredientTypeID && selected.length) ? selected[0].name : 'Not set';
         };
 
+        // Add functionality
+        $scope.addType = function() {
+            var newID = 9999999;
+            console.log("adding new type with id " + newID);
+            if(recipeBook.newTypeName != " ") {
+                recipeBook.allTypes.push(
+                    {
+                        name: recipeBook.newTypeName,
+                        id: newID
+                    });
+
+                recipeBook.newTypeName = " ";
+                $('#newTypeNameInput').focus();
+                $('#errorMessageDiv').html("").hide();
+                return true;
+            } else {
+                $('#newTypeNameInput').focus();
+                $('#errorMessageDiv').html("Please enter a valid type name.").show();
+                return false;
+            }
+        };
+
+        // Update functionality
         $scope.updateIngredientName = function(data, ingredientID){
             $http.post('services/update-ingredient-by-id.php', {id: ingredientID, name: data}).
                 success(function(successData){
@@ -88,17 +110,38 @@
                 });
         };
 
-        $scope.itemClicked = function ($index) {
-            console.log($index);
-            $scope.selectedIndex = $index;
+        // Remove functionality
+        $scope.removeTypeByID = function(typeID) {
+            console.log("removing type of id " + typeID);
+
+            $http.post('services/delete-type-by-id.php', {id:typeID}).
+                success(function(successData){
+                    console.log(successData);
+                    $( "[data-type-id=" + typeID + "]").remove();
+                    return true;
+                }).
+                error(function(errorData){
+                    console.log("errorData: " + errorData);
+                    return false;
+                });
+        };
+
+        // Menu and recipe click highlighting
+        $scope.recipeClicked = function ($index) {
+            $scope.selectedRecipeIndex = $index;
+        }
+
+        $scope.menuClicked = function($index) {
+            $scope.selectedMenuIndex = $index;
         }
     }]);
 
     app.controller('TabController', function(){
-        this.tab = 2;
+        this.tab = TYPE_TAB;
 
         this.setTab = function(newValue){
             this.tab = newValue;
+            $('#errorMessageDiv').html("").hide();
         };
 
         this.isSet = function(tabName){
@@ -108,6 +151,6 @@
 })();
 
 $(document).ready(function(){
-    $('#errorMessageDiv').hide();
-    $('#successMessageDiv').hide();
+    $('#errorMessageDiv').html("").hide();
+    $('#successMessageDiv').html("").hide();
 });

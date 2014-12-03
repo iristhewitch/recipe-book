@@ -37,7 +37,6 @@
     });*/
 
     app.directive('icNavAutoclose', function () {
-        console.log("icNavAutoclose");
         return function (scope, elm, attrs) {
             var collapsible = $(elm).find(".navbar-collapse");
             var visible = false;

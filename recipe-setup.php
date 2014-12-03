@@ -69,7 +69,8 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 			'insert into types (name) values ("Liquids")',											// 5
 			'insert into types (name) values ("Meats")',											// 6
 			'insert into types (name) values ("Fruits, Vegetables and Others")',    				// 7
-			'insert into types (name) values ("Herbs, Spices and Seasonings")'						// 8
+			'insert into types (name) values ("Herbs, Spices and Seasonings")',						// 8
+            'insert into types (name) values ("Misc.")'                                             // 9
 		);
 
         $initialMenuStrings = array(

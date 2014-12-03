@@ -1,8 +1,8 @@
 <div class="bs-component">
     <div class="list-group">
         <a href="#" ng-repeat="recipe in recipeBook.allRecipes" class="list-group-item"
-            ng-class="{active: $index == selectedIndex}"
-            ng-click="itemClicked($index)">
+            ng-class="{active: $index == selectedRecipeIndex}"
+            ng-click="recipeClicked($index)">
             {{ recipe.name }}
         </a>
     </div>

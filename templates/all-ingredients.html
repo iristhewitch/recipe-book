@@ -14,7 +14,7 @@
                   editable-select="ingredient.type_id"
                   e-ng-options="type.id as type.name for type in recipeBook.allTypes"
                   onbeforesave="updateIngredientType($data, ingredient.ingredient_id)"
-                  class="list-group-item-text badge">
+                  class="list-group-item-text badge" ng-class="{warningred: ingredient.type_name === 'Misc.'}">
             {{ recipeBook.showType(ingredient.type_id) }}
             </span>
         </a>

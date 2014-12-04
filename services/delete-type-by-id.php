@@ -19,18 +19,16 @@ if($conn) {
     if(isset($postdata['id']) and !empty($postdata['id'])) {
         $typeID = $postdata['id'];
 
-        if($typeID === '9999999')
-        /*$query = "delete from ingredients
-                  where id = $ingredientID";
+        $query = "update ingredients_types
+                    set types_id = (select id from types where name = 'Misc.')
+                    where types_id = $typeID";
 
-        $query2 = "delete from ingredients_types
-                    where ingredients_id = $ingredientID";
+        $query2 = "delete from types
+                  where id = $typeID";
 
         $results = $conn->ExecuteQuery($query);
-        $results2 = $conn->ExecuteQuery($query2);*/
-            echo "false";
-        else
-            echo "true";
+        $results2 = $conn->ExecuteQuery($query2);
+        echo "true";
 
     }
 } else {

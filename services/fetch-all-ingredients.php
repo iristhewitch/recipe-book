@@ -12,8 +12,6 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 $conn = new SuperConnection();
 
 if($conn) {
-    //$query = "select * from ingredients";
-    //$query = "select * from types";
 
     $query = "select ingredients.id ingredient_id,
                 types.name type_name,

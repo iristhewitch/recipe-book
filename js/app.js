@@ -18,45 +18,85 @@
         $scope.selectedMenuIndex = 0;
         recipeBook.newTypeName = " ";
 
-        $http.get('services/fetch-all-ingredients.php').success(function(data){
-            recipeBook.allIngredients = data;
-        });
+        // load all information
+        recipeBook.loadIngredients = function(){
+            $http.get('services/fetch-all-ingredients.php').success(function(data){
+                recipeBook.allIngredients = data;
+            });
+        }
 
-        $http.get('services/fetch-all-types.php').success(function(data){
-            recipeBook.allTypes = data;
-        });
+        recipeBook.loadTypes = function(){
+            $http.get('services/fetch-all-types.php').success(function(data){
+                recipeBook.allTypes = data;
+            });
+        }
 
-        $http.get('services/fetch-all-measures.php').success(function(data){
-           recipeBook.allMeasures = data;
-        });
+        recipeBook.loadMeasures = function(){
+            $http.get('services/fetch-all-measures.php').success(function(data){
+                recipeBook.allMeasures = data;
+            });
+        }
 
-        $http.get('services/fetch-all-recipes.php').success(function(data){
-            recipeBook.allRecipes = data;
-        });
+        recipeBook.loadRecipes = function(){
+            $http.get('services/fetch-all-recipes.php').success(function(data){
+                recipeBook.allRecipes = data;
+            });
+        }
+
+        recipeBook.loadAllInformation = function(){
+            recipeBook.loadIngredients();
+            recipeBook.loadTypes();
+            recipeBook.loadMeasures();
+            recipeBook.loadRecipes();
+        }
+
+        recipeBook.loadAllInformation();
 
         this.showType = function(ingredientTypeID) {
             var selected = $filter('filter')(recipeBook.allTypes, {id: ingredientTypeID});
+            var singleSelection;
+            if(selected.length) {
+                for (var i = 0; i < selected.length; i++) {
+                    if(selected[i].id == ingredientTypeID){
+                        singleSelection = selected[i];
+                    }
+                }
+
+                return singleSelection.name;
+            }
+            else
+                return 'Not set';
             return (ingredientTypeID && selected.length) ? selected[0].name : 'Not set';
         };
 
         // Add functionality
         $scope.addType = function() {
-            var newID = 9999999;
-            console.log("adding new type with id " + newID);
+            var newID = -1;
+
             if(recipeBook.newTypeName != " ") {
-                recipeBook.allTypes.push(
-                    {
-                        name: recipeBook.newTypeName,
-                        id: newID
+                $http.post('services/insert-type-by-name.php', {name: recipeBook.newTypeName}).
+                    success(function(successData){
+                        newID = successData[0].id;
+                        console.log("adding new type (" +recipeBook.newTypeName + ") with id " + newID);
+
+                        recipeBook.allTypes.push(
+                            {
+                                name: recipeBook.newTypeName,
+                                id: newID
+                            });
+
+                        recipeBook.loadTypes();
+                        recipeBook.newTypeName = " ";
+                        $('#newTypeNameInput').focus();
+                    }).
+                    error(function(errorData){
+                        console.log("errorData: " + errorData);
+                        return false;
                     });
 
-                recipeBook.newTypeName = " ";
-                $('#newTypeNameInput').focus();
-                $('#errorMessageDiv').html("").hide();
                 return true;
             } else {
                 $('#newTypeNameInput').focus();
-                $('#errorMessageDiv').html("Please enter a valid type name.").show();
                 return false;
             }
         };
@@ -65,6 +105,7 @@
         $scope.updateIngredientName = function(data, ingredientID){
             $http.post('services/update-ingredient-by-id.php', {id: ingredientID, name: data}).
                 success(function(successData){
+                    recipeBook.loadIngredients();
                     return successData === "true";
                 }).
                 error(function(errorData){
@@ -76,6 +117,7 @@
         $scope.updateIngredientType = function(data, ingredientID){
             $http.post('services/update-ingredient-by-id.php', {id: ingredientID, type: data}).
                 success(function(successData){
+                    recipeBook.loadIngredients();
                     return successData === "true";
                 }).
                 error(function(errorData){
@@ -85,10 +127,9 @@
         };
 
         $scope.updateTypeName = function(data, typeID){
-            console.log("new type name: " + data + "; " + typeID);
             $http.post('services/update-type-by-id.php', {id: typeID, name: data}).
                 success(function(successData){
-                    console.log(successData);
+                    recipeBook.loadTypes();
                     return successData === "true";
                 }).
                 error(function(errorData){
@@ -101,7 +142,7 @@
             console.log("new type name: " + data + "; " + measureID);
             $http.post('services/update-measure-by-id.php', {id: measureID, name: data}).
                 success(function(successData){
-                    console.log(successData);
+                    recipeBook.loadMeasures();
                     return successData === "true";
                 }).
                 error(function(errorData){
@@ -116,8 +157,8 @@
 
             $http.post('services/delete-type-by-id.php', {id:typeID}).
                 success(function(successData){
-                    console.log(successData);
-                    $( "[data-type-id=" + typeID + "]").remove();
+                    recipeBook.loadTypes();
+                    recipeBook.loadIngredients();
                     return true;
                 }).
                 error(function(errorData){
@@ -137,11 +178,10 @@
     }]);
 
     app.controller('TabController', function(){
-        this.tab = TYPE_TAB;
+        this.tab = INGREDIENT_TAB;
 
         this.setTab = function(newValue){
             this.tab = newValue;
-            $('#errorMessageDiv').html("").hide();
         };
 
         this.isSet = function(tabName){

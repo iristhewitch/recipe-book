@@ -5,13 +5,13 @@ if (!defined("INCLUDES_PATH")){
 }
 /* ¯¯¯¯¯¯¯¯¯¯ CONFIGURATION ¯¯¯¯¯¯¯¯¯¯¯¯ */
 
-require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
+require_once(INCLUDES_PATH . '/dbi_functions_sqlite3.php');
 //require_once(INCLUDES_PATH . '/debug_functions.php');
 //TurnDebugOff();
 
-$conn = new SuperConnection();
+$db = new Sqlite3Connection();
 
-if($conn) {
+if($db) {
     $postdata = file_get_contents("php://input");
     $postdata = json_decode($postdata, true);
 
@@ -19,14 +19,14 @@ if($conn) {
         $typeName = $postdata['name'];
 
         $query = "insert into types (name) values ('$typeName')";
-        $results = $conn->ExecuteQuery($query);
+        $results = $db->ExecuteQuery($query);
 
 
         $query = "select name, id
                     from types
                     where name = '$typeName'";
 
-        $results = $conn->ExecuteArrayQuery($query);
+        $results = $db->ExecuteArrayQuery($query);
         $json = json_encode($results);
         echo $json;
     }

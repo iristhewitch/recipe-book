@@ -5,13 +5,13 @@ if (!defined("INCLUDES_PATH")){
 }
 /* ¯¯¯¯¯¯¯¯¯¯ CONFIGURATION ¯¯¯¯¯¯¯¯¯¯¯¯ */
 
-require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
+require_once(INCLUDES_PATH . '/dbi_functions_sqlite3.php');
 //require_once(INCLUDES_PATH . '/debug_functions.php');
 //TurnDebugOff();
 
-$conn = new SuperConnection();
+$db = new Sqlite3Connection();
 
-if($conn) {
+if($db) {
     $postdata = file_get_contents("php://input");
     $postdata = json_decode($postdata, true);
 
@@ -24,8 +24,8 @@ if($conn) {
         $query2 = "delete from ingredients_types
                     where ingredients_id = $ingredientID";
 
-        $results = $conn->ExecuteQuery($query);
-        $results2 = $conn->ExecuteQuery($query2);
+        $results = $db->ExecuteQuery($query);
+        $results2 = $db->ExecuteQuery($query2);
         echo "true";
     }
 } else {

@@ -13,7 +13,7 @@ $config = array(
 			//"username" => "",
 			//"password" => "",
 			//"host" => "localhost",
-            "mode" => 0666
+            "mode" => SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE
 		)
 	),
 	"urls" => array(

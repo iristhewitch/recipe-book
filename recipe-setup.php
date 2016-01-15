@@ -4,11 +4,14 @@
 		require_once("config.php");
 	}
 /* ¯¯¯¯¯¯¯¯¯¯ CONFIGURATION ¯¯¯¯¯¯¯¯¯¯¯¯ */
+require_once(INCLUDES_PATH . '/dbi_functions_sqlite3.php');
 
-require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 
+	//phpinfo();
 	$error = '';
-	$db = new SuperConnection();
+	echo 'initializing connection...';
+	$db = new Sqlite3Connection();
+	echo '<strong>connection initialized!</strong><br />';
 
 	if ($db) {
 		// table setup
@@ -177,12 +180,12 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
 			'select * from ingredients',
 			'select * from recipes',
 			'select * from directions',
-			'select * from menuss_recipes',
+			'select * from menus_recipes',
             'select * from recipes_ingredients'
 		);
 		
 		$checkRecipeIngredients =
-            "select recipes_ingredients.measure_amount,
+			"select recipes_ingredients.measure_amount,
 	                measures.name,
 	                ingredients.name
             from ingredients, measures, recipes_ingredients
@@ -205,25 +208,63 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
         $checkTables = "SELECT name FROM sqlite_master WHERE type='table'";
         $checkIngredientsTypes = "select * from ingredients_types";
 
-        $db->ExecuteQueries($dropStrings);
+		echo 'executing drop strings...<br />';
+        $db->ExecuteQueries($dropStrings, true);
+		echo '<strong>drop strings executed!</strong><br /><br />';
+
+		echo 'executing create strings...<br />';
         $db->ExecuteQueries($createStrings);
-        $db->ExecuteQueries($measureStrings);
-        $db->ExecuteQueries($initialMenuStrings);
-        $db->ExecuteQueries($initialTypeStrings);
-        $db->ExecuteQueries($initialIngredientStrings);
-        $db->ExecuteQueries($initialRecipeStrings);
-        $db->ExecuteQueries($initialDirectionStrings);
-        $db->ExecuteQueries($initialMenusRecipesStrings);
-        $db->ExecuteQueries($initialRecipesIngredientsStrings);
-        $db->ExecuteQueries($initialIngredientsTypesStrings);
-        $recipesIngredients = $db->ExecuteArrayQuery($checkRecipeIngredients);
-        $tables = $db->ExecuteArrayQuery($checkTables);
+		echo '<strong>create strings executed!</strong><br /><br />';
+
+		echo 'executing measure strings...<br />';
+        $db->ExecuteQueries($measureStrings, true);
+		echo '<strong>measure strings executed!</strong><br /><br />';
+
+		echo 'executing menu strings...<br />';
+		$db->ExecuteQueries($initialMenuStrings, true);
+		echo '<strong>menu strings executed!</strong><br /><br />';
+
+		echo 'executing type strings...<br />';
+		$db->ExecuteQueries($initialTypeStrings, true);
+		echo '<strong>type strings executed!</strong><br /><br />';
+
+		echo 'executing ingredient strings...<br />';
+		$db->ExecuteQueries($initialIngredientStrings, true);
+		echo '<strong>ingredient strings executed!</strong><br /><br />';
+
+		echo 'executing recipe strings...<br />';
+		$db->ExecuteQueries($initialRecipeStrings, true);
+		echo '<strong>recipe strings executed!</strong><br /><br />';
+
+		echo 'executing direction strings...<br />';
+		$db->ExecuteQueries($initialDirectionStrings, true);
+		echo '<strong>direction strings executed!</strong><br /><br />';
+
+		echo 'executing menu-recipe strings...<br />';
+		$db->ExecuteQueries($initialMenusRecipesStrings, true);
+		echo '<strong>menu-recipe strings executed!</strong><br /><br />';
+
+		echo 'executing recipe-ingredient strings...<br />';
+		$db->ExecuteQueries($initialRecipesIngredientsStrings, true);
+		echo '<strong>recipe-ingredient strings executed!</strong><br /><br />';
+
+		echo 'executing ingredient-type strings...<br />';
+		$db->ExecuteQueries($initialIngredientsTypesStrings, true);
+		echo '<strong>ingredient-type strings executed!</strong><br /><br />';
+
+		echo '<strong>checking recipe-ingredients...</strong><br />';
+        $recipesIngredients = $db->ExecuteArrayQuery($checkRecipeIngredients, true);
         echo '<pre>';
-        //print_r($recipesIngredients);
-        print_r($tables);
+        print_r($recipesIngredients);
         echo '</pre>';
 
-        echo '<pre>Initialized recipe database.</pre>';
+		echo '<strong>checking tables...</strong><br />';
+		$tables = $db->ExecuteArrayQuery($checkTables);
+		echo '<pre>';
+		print_r($tables);
+		echo '</pre>';
+
+        echo '<pre><strong>Initialized recipe database.</strong></pre>';
 	}
 	else {
 		echo '<pre>';

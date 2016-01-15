@@ -55,6 +55,8 @@
         this.showType = function(ingredientTypeID) {
             var selected = $filter('filter')(recipeBook.allTypes, {id: ingredientTypeID});
             var singleSelection;
+
+            // Since it's returning 1 and 10 in the same set...
             if(selected.length) {
                 for (var i = 0; i < selected.length; i++) {
                     if(selected[i].id == ingredientTypeID){

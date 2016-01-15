@@ -5,13 +5,13 @@ if (!defined("INCLUDES_PATH")){
 }
 /* ¯¯¯¯¯¯¯¯¯¯ CONFIGURATION ¯¯¯¯¯¯¯¯¯¯¯¯ */
 
-require_once(INCLUDES_PATH . '/dbi_functions_sqlite.php');
+require_once(INCLUDES_PATH . '/dbi_functions_sqlite3.php');
 //require_once(INCLUDES_PATH . '/debug_functions.php');
 //TurnDebugOff();
 
-$conn = new SuperConnection();
+$db = new Sqlite3Connection();
 
-if($conn) {
+if($db) {
 
     $query = "select ingredients.id ingredient_id,
                 types.name type_name,
@@ -22,7 +22,7 @@ if($conn) {
               and ingredients_types.ingredients_id = ingredients.id
               order by types.name, ingredients.name";
 
-    $results = $conn->ExecuteArrayQuery($query);
+    $results = $db->ExecuteArrayQuery($query);
     $json = json_encode($results);
     echo $json;
 }

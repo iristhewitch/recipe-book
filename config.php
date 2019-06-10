@@ -17,7 +17,7 @@ $config = array(
 		)
 	),
 	"urls" => array(
-		"baseUrl" => "http://arasaia.net/test/recipe" //change this to the root of your application
+		"baseUrl" => "http://arasaia.net/recipe" //change this to the root of your application
 	),
 	"paths" => array(
 		"images" => $_SERVER["DOCUMENT_ROOT"] . "/images"

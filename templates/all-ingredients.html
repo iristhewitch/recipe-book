@@ -18,5 +18,11 @@
             {{ recipeBook.showType(ingredient.type_id) }}
             </span>
         </a>
+        <div id="addIngredient">
+            <a href="#" class="list-group-item">
+                <input type="text" ng-model="recipeBook.newIngredientName" placeholder="New Ingredient" id="newIngredientNameInput"/>
+                <span class="glyphicon glyphicon-plus float-right" ng-click="addIngredient()"></span>
+            </a>
+        </div>
     </div>
 </div>

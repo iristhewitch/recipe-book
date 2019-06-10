@@ -17,38 +17,39 @@
         $scope.selectedRecipeIndex = 0;
         $scope.selectedMenuIndex = 0;
         recipeBook.newTypeName = " ";
+        recipeBook.newIngredientName = " ";
 
         // load all information
         recipeBook.loadIngredients = function(){
             $http.get('services/fetch-all-ingredients.php').success(function(data){
                 recipeBook.allIngredients = data;
             });
-        }
+        };
 
         recipeBook.loadTypes = function(){
             $http.get('services/fetch-all-types.php').success(function(data){
                 recipeBook.allTypes = data;
             });
-        }
+        };
 
         recipeBook.loadMeasures = function(){
             $http.get('services/fetch-all-measures.php').success(function(data){
                 recipeBook.allMeasures = data;
             });
-        }
+        };
 
         recipeBook.loadRecipes = function(){
             $http.get('services/fetch-all-recipes.php').success(function(data){
                 recipeBook.allRecipes = data;
             });
-        }
+        };
 
         recipeBook.loadAllInformation = function(){
             recipeBook.loadIngredients();
             recipeBook.loadTypes();
             recipeBook.loadMeasures();
             recipeBook.loadRecipes();
-        }
+        };
 
         recipeBook.loadAllInformation();
 
@@ -59,7 +60,7 @@
             // Since it's returning 1 and 10 in the same set...
             if(selected.length) {
                 for (var i = 0; i < selected.length; i++) {
-                    if(selected[i].id == ingredientTypeID){
+                    if(selected[i].id === ingredientTypeID){
                         singleSelection = selected[i];
                     }
                 }
@@ -67,15 +68,15 @@
                 return singleSelection.name;
             }
             else
-                return 'Not set';
-            return (ingredientTypeID && selected.length) ? selected[0].name : 'Not set';
+                //return 'Not set';
+                return (ingredientTypeID && selected.length) ? selected[0].name : 'Not set';
         };
 
         // Add functionality
         $scope.addType = function() {
             var newID = -1;
 
-            if(recipeBook.newTypeName != " ") {
+            if(recipeBook.newTypeName !== " ") {
                 $http.post('services/insert-type-by-name.php', {name: recipeBook.newTypeName}).
                     success(function(successData){
                         newID = successData[0].id;
@@ -99,6 +100,37 @@
                 return true;
             } else {
                 $('#newTypeNameInput').focus();
+                return false;
+            }
+        };
+
+        $scope.addIngredient = function() {
+            var newID = -1;
+
+            if(recipeBook.newIngredientName !== " ") {
+                $http.post('services/insert-ingredient-by-name.php', {name: recipeBook.newIngredientName}).
+                success(function(successData){
+                    newID = successData[0].id;
+                    console.log("adding new ingredient (" +recipeBook.newIngredientName + ") with id " + newID);
+
+                    recipeBook.allIngredients.push(
+                        {
+                            name: recipeBook.newIngredientName,
+                            id: newID
+                        });
+
+                    recipeBook.loadIngredients();
+                    recipeBook.newIngredientName = " ";
+                    $('#newTypeNameInput').focus();
+                }).
+                error(function(errorData){
+                    console.log("errorData: " + errorData);
+                    return false;
+                });
+
+                return true;
+            } else {
+                $('#newIngredientNameInput').focus();
                 return false;
             }
         };

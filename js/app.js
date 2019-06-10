@@ -111,9 +111,6 @@
             if(recipeBook.newIngredientName !== " " && recipeBook.newIngredientType !== " ") {
                 $http.post('services/insert-ingredient-by-name.php', {name: recipeBook.newIngredientName, type_id: recipeBook.newIngredientType}).
                 success(function(successData){
-
-                    console.log(successData);
-
                     newID = successData[0].id;
                     console.log("adding new ingredient (" +recipeBook.newIngredientName + ") with id " + newID + " and type (" + recipeBook.newIngredientType + ")");
 
@@ -135,7 +132,6 @@
                 return true;
             } else {
                 $('#newIngredientNameInput').focus();
-                console.log("failed to add new ingredient (" +recipeBook.newIngredientName + ") with id " + newID + " and type (" + recipeBook.newIngredientType + ")");
                 return false;
             }
         };

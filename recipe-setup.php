@@ -67,18 +67,20 @@ require_once(INCLUDES_PATH . '/dbi_functions_sqlite3.php');
 		$initialTypeStrings = array(
 			'insert into types (name) values ("Dairy")',											// 1
 			'insert into types (name) values ("Breads, Grains and Pasta")',							// 2
-			'insert into types (name) values ("Pre-packaged Stuff")',								// 3
+			'insert into types (name) values ("Prepared")',											// 3
 			'insert into types (name) values ("Canned Goods")',										// 4
 			'insert into types (name) values ("Liquids")',											// 5
-			'insert into types (name) values ("Meats")',											// 6
-			'insert into types (name) values ("Fruits, Vegetables and Others")',    				// 7
+			'insert into types (name) values ("Proteins")',											// 6
+			'insert into types (name) values ("Produce")',    										// 7
 			'insert into types (name) values ("Herbs, Spices and Seasonings")',						// 8
             'insert into types (name) values ("Misc.")'                                             // 9
 		);
 
         $initialMenuStrings = array(
             // YYYY-MM-DD
-            'insert into menus (name, start_date, end_date) values ("October 13-17", "2014-09-13", "2014-09-17")'
+            'insert into menus (name, start_date, end_date) values ("October 13-17", "2014-09-13", "2014-09-17")',
+			'insert into menus (name, start_date, end_date) values ("June 10-14", "2019-06-10", "2014-06-14")',
+			'insert into menus (name, start_date, end_date) values ("July 22-26", "2019-07-22", "2019-07-26")'
         );
 
         $initialIngredientStrings = array(

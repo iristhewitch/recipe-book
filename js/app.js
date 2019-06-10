@@ -21,12 +21,6 @@
         recipeBook.newIngredientType = " ";
 
         // load all information
-        recipeBook.loadIngredients = function(){
-            $http.get('services/fetch-all-ingredients.php').success(function(data){
-                recipeBook.allIngredients = data;
-            });
-        };
-
         recipeBook.loadTypes = function(){
             $http.get('services/fetch-all-types.php').success(function(data){
                 recipeBook.allTypes = data;
@@ -39,17 +33,39 @@
             });
         };
 
+        recipeBook.loadIngredients = function(){
+            $http.get('services/fetch-all-ingredients.php').success(function(data){
+                recipeBook.allIngredients = data;
+            });
+        };
+
         recipeBook.loadRecipes = function(){
             $http.get('services/fetch-all-recipes.php').success(function(data){
                 recipeBook.allRecipes = data;
             });
         };
 
+        recipeBook.loadMenus = function(){
+            $http.get('services/fetch-all-menus.php').success(function(data){
+                recipeBook.allMenus = data;
+            });
+        };
+
         recipeBook.loadAllInformation = function(){
-            recipeBook.loadIngredients();
+            //console.log("loading types...")
             recipeBook.loadTypes();
+
+            //console.log("loading measures...")
             recipeBook.loadMeasures();
+
+            //console.log("loading ingredients...")
+            recipeBook.loadIngredients();
+
+            //console.log("loading recipes...")
             recipeBook.loadRecipes();
+
+            //console.log("loading menus...")
+            recipeBook.loadMenus();
         };
 
         recipeBook.loadAllInformation();
@@ -70,7 +86,7 @@
             }
             else
                 //return 'Not set';
-                return (ingredientTypeID && selected.length) ? selected[0].name : 'Not set';
+                return (ingredientTypeID && selected.length) ? selected[0].name : 'Misc.';
         };
 
         // Add functionality
@@ -213,7 +229,8 @@
     }]);
 
     app.controller('TabController', function(){
-        this.tab = INGREDIENT_TAB;
+        //this.tab = INGREDIENT_TAB;
+        this.tab = MENU_TAB;
 
         this.setTab = function(newValue){
             this.tab = newValue;

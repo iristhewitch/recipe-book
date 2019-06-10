@@ -1,0 +1,9 @@
+<div class="bs-component">
+    <div class="list-group">
+        <a href="#" ng-repeat="menu in recipeBook.allMenus" class="list-group-item"
+           ng-class="{active: $index == selectedMenuIndex}"
+           ng-click="menuClicked($index)">
+            {{ menu.name }}: {{menu.startDate}} - {{menu.endDate}}
+        </a>
+    </div>
+</div>

@@ -29,12 +29,12 @@
         };
     });
 
-    /*app.directive('allMenus', function(){
+    app.directive('allMenus', function(){
         return {
             restrict: 'E',
             templateUrl: 'templates/all-menus.html'
         };
-    });*/
+    });
 
     app.directive('icNavAutoclose', function () {
         return function (scope, elm, attrs) {

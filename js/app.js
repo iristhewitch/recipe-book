@@ -121,7 +121,7 @@
 
                     recipeBook.loadIngredients();
                     recipeBook.newIngredientName = " ";
-                    $('#newTypeNameInput').focus();
+                    $('#newIngredientNameInput').focus();
                 }).
                 error(function(errorData){
                     console.log("errorData: " + errorData);
